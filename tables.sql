@@ -138,10 +138,11 @@ CREATE INDEX idx_fk_locations_vhs ON LOCATIONS(id_vhs#) TABLESPACE tbs_indexes;
 --Creation de la table qui contient les erreurs
 CREATE TABLE ERREUR (
     id_err NUMBER(9) NOT NULL,
-    erreur VARCHAR2(255) UNIQUE
+    erreur VARCHAR2(255)
 )TABLESPACE tbs_datas;
 
 ALTER TABLE ERREUR ADD(CONSTRAINT pk_erreur PRIMARY KEY(id_err) USING INDEX TABLESPACE tbs_indexes);
+ALTER TABLE ERREUR ADD(CONSTRAINT unique_err UNIQUE(erreur) USING INDEX TABLESPACE tbs_indexes);
 ----------------------------------------------------------------
 --------------Gestion des auto increment des tables-------------
 ----------------------------------------------------------------
@@ -333,7 +334,7 @@ ORDER BY OWNER, TABLESPACE_NAME;
 
 --Requete 4 -------------------A COMPLETER
 SELECT SEGMENT_NAME, SEGMENT_TYPE, TABLESPACE_NAME, BLOCKS
-FROM DBA_SEGMENTS WHERE TABLESPACE_NAME='TBS_DATAS';
+FROM DBA_SEGMENTS;
 
 --Requete 6
-select * from dba_sys_privs where grantee = upper('nom_utilisateur')
+select * from dba_sys_privs;
