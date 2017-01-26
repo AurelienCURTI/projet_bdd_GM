@@ -1,7 +1,5 @@
-﻿123;124;125;126;127;;
-DITMANN;SANTANA;DUFLY;COHEN;TARANTINO;;
-Elia;Carlos;Patrick;Pascal;Michel;;
-12 rue X;89 av Y;15 rue S;12 rue M;199 av U;;
-Nice;Nice;Antibes;Cannes;Nice;;
-88767998;12234567;15263748;18374932;55756758;;
-e.d@x.fr;SC@toto.com;DUF.PAT@rand.fr;CP@soso.com;m.c@wanadoo.fr;;
+50,DITTMAN,Elia,"12 rue X", Nice, 88767998, e.d@x.fr
+51,SANTANA,Carlos,"89 av Y",Nice,12234567,SC@toto.com
+52,DUFLY,Patrick,"15 rue S",Antibes,15263748,DUF.PAT@rand.fr
+53,COHEN,Pascal,"12 rue M",Cannes,18374932,CP@soso.com
+54,TARANTINO,Michel,"199 av U",Nice,55756758,m.c@wanadoo.fr
