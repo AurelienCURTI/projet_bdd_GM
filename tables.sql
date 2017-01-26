@@ -33,6 +33,8 @@ CREATE TABLE FILM (
 ALTER TABLE FILM ADD(CONSTRAINT chk_genre CHECK(genre IN ('Action','Comedie','Horreur','Romantique','Enfants')));
 ALTER TABLE FILM ADD(CONSTRAINT pk_film PRIMARY KEY(id_film) USING INDEX TABLESPACE tbs_indexes);
 
+CREATE INDEX idx_chk_genre_film ON FILM(genre) TABLESPACE tbs_indexes;
+
 --Creation table DVD	
 CREATE TABLE DVD (
 	id_dvd    NUMBER(9) NOT NULL,
@@ -296,36 +298,42 @@ END;
 /
 
 ----------------------------------------------------------------
---------------------Creation des utilisateurs-------------------
+--------------------Création de l'utilisateur-------------------
 ----------------------------------------------------------------
 
 -- Creation du propriétaire
 CREATE USER proprietaire IDENTIFIED BY passwd
   DEFAULT TABLESPACE tbs_users
   TEMPORARY TABLESPACE tbs_temp
-  QUOTA UNLIMITED ON users;
+  QUOTA UNLIMITED ON tbs_users;
   
-GRANT CONNECT, CREATE TABLE TO proprietaire;
+GRANT CONNECT, RESOURCE TO proprietaire;
 
-ALTER AUTHORIZATION
-   ON [ OBJECT :: ] DVD
-   TO { SCHEMA OWNER | proprietaire }
-ALTER AUTHORIZATION
-   ON [ OBJECT :: ] FILM
-   TO { SCHEMA OWNER | proprietaire }
-ALTER AUTHORIZATION
-   ON [ OBJECT :: ] BLUERAY
-   TO { SCHEMA OWNER | proprietaire }
-ALTER AUTHORIZATION
-   ON [ OBJECT :: ] VHS
-   TO { SCHEMA OWNER | proprietaire }
-ALTER AUTHORIZATION
-   ON [ OBJECT :: ] CLIENTS
-   TO { SCHEMA OWNER | proprietaire }
-ALTER AUTHORIZATION
-   ON [ OBJECT :: ] LOCATIONS
-   TO { SCHEMA OWNER | proprietaire }
-ALTER AUTHORIZATION
-   ON [ OBJECT :: ] VENTES
-   TO { SCHEMA OWNER | proprietaire }
+-----------------------------------------------------------------
+-------------------------- Partie 3.2 ---------------------------
+-----------------------------------------------------------------
 
+--Requete 2
+SELECT datas.tablespace_name AS NOM_TABLESPACE, datas.file_name AS FICHIER_TABLESPACE, datas.total_space_mb AS ESPACE_TOTAL, (datas.total_space_mb - free.free_space_mb) AS ESPACE_UTILISE_MB, free.free_space_mb AS ESPACE_LIBRE_MB
+FROM (SELECT tablespace_name, file_name, SUM(bytes) AS TOTAL_SPACE, ROUND(SUM(bytes) / 1048576) AS TOTAL_SPACE_MB
+      FROM dba_data_files
+      GROUP BY tablespace_name, file_name) datas,
+     (SELECT tablespace_name, SUM(bytes) AS FREE_SPACE, ROUND(SUM(bytes) / 1048576) AS FREE_SPACE_MB
+       FROM dba_free_space
+       GROUP BY tablespace_name) free
+WHERE datas.tablespace_name = free.tablespace_name(+)
+ORDER BY free.tablespace_name;
+
+--Requete 3
+SELECT  OWNER AS "SCHEMA",TABLESPACE_NAME AS "TABLESPACE", SEGMENT_TYPE AS "TYPE OBJET", Sum(BYTES) / 1024 / 1024    AS "TAILLE (Mb)" 
+FROM    DBA_EXTENTS
+WHERE OWNER='AUREL'
+GROUP BY OWNER, TABLESPACE_NAME, SEGMENT_TYPE
+ORDER BY OWNER, TABLESPACE_NAME;
+
+--Requete 4 -------------------A COMPLETER
+SELECT SEGMENT_NAME, SEGMENT_TYPE, TABLESPACE_NAME, BLOCKS
+FROM DBA_SEGMENTS WHERE TABLESPACE_NAME='TBS_DATAS';
+
+--Requete 6
+select * from dba_sys_privs where grantee = upper('nom_utilisateur')
