@@ -303,16 +303,19 @@ END;
 ----------------------------------------------------------------
 
 -- Creation du propriétaire
-CREATE USER proprietaire IDENTIFIED BY passwd
+CREATE USER prop IDENTIFIED BY passwd
   DEFAULT TABLESPACE tbs_users
   TEMPORARY TABLESPACE tbs_temp
   QUOTA UNLIMITED ON tbs_users;
   
-GRANT CONNECT, RESOURCE TO proprietaire;
+GRANT CONNECT, RESOURCE TO prop;
 
 -----------------------------------------------------------------
 -------------------------- Partie 3.2 ---------------------------
 -----------------------------------------------------------------
+--Requete 1
+
+SELECT name AS DATABASEFILES FROM V$DATAFILE UNION SELECT member FROM V$LOGFILE UNION SELECT name FROM V$ARCHIVED_LOG;
 
 --Requete 2
 SELECT datas.tablespace_name AS NOM_TABLESPACE, datas.file_name AS FICHIER_TABLESPACE, datas.total_space_mb AS ESPACE_TOTAL, (datas.total_space_mb - free.free_space_mb) AS ESPACE_UTILISE_MB, free.free_space_mb AS ESPACE_LIBRE_MB
@@ -335,6 +338,10 @@ ORDER BY OWNER, TABLESPACE_NAME;
 --Requete 4 -------------------A COMPLETER
 SELECT SEGMENT_NAME, SEGMENT_TYPE, TABLESPACE_NAME, BLOCKS
 FROM DBA_SEGMENTS;
+--DBMS_SPACE pour les blocs libres et utilisés.
+
+--Requete 5 -------------------A VERIFIER
+ALTER TABLE prop.FILM SHRINK SPACE COMPACT;
 
 --Requete 6
 select * from dba_sys_privs;
