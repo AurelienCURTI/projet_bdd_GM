@@ -3,8 +3,8 @@ Export du schema de prop avec toutes ses données :
 - Creer le repertoire sur l'OS et donner les accès pour qu'oracle puisse lire et écrire dedans.
 - Indiquer le repertoire via SQLPLUS : CREATE OR REPLACE DIRECTORY prop_dump_dir AS '/home/aurelien/Documents/M1IFI/dump_oracle/';
 - Donner les accès : grant read, write on DIRECTORY prop_dump_dir to prop
-- Lancer depuis un terminal ou console : expdp prop/mdpprop schemas=prop directory=prop_dump_dir dumpfile=prop.dmp logfile=expdp_prop.log
+- Lancer depuis un terminal ou console : expdp prop/passprop schemas=prop directory=prop_dump_dir dumpfile=prop.dmp logfile=expdp_prop.log
 
 Import du schema de prop avec toutes ses données (attention n'est importable que si prop est le propriétaire)
-impdp prop/propmdp directory=prop_dump_dir dumpfile=prop.dmp logfile=prop_aurel.log TABLE_EXISTS_ACTION=replace
+impdp prop/passprop directory=prop_dump_dir dumpfile=prop.dmp logfile=prop_aurel.log TABLE_EXISTS_ACTION=replace
 (on specifie l'action pour TABLE_EXTSTS_ACTION a replace au cas ou les tables existent déjà en base.
