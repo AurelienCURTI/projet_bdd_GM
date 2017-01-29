@@ -1,4 +1,4 @@
------------------------------------------------------------------
+﻿-----------------------------------------------------------------
 -------------------------- Partie 3.2 ---------------------------
 -----------------------------------------------------------------
 --Requete 1
@@ -23,13 +23,33 @@ WHERE OWNER='AUREL'
 GROUP BY OWNER, TABLESPACE_NAME, SEGMENT_TYPE
 ORDER BY OWNER, TABLESPACE_NAME;
 
---Requete 4 -------------------A COMPLETER
-SELECT SEGMENT_NAME, SEGMENT_TYPE, TABLESPACE_NAME, BLOCKS
+--Requete 4
+SELECT SEGMENT_NAME, SEGMENT_TYPE, TABLESPACE_NAME, BLOCKS, EMPTY_BLOCKS
 FROM DBA_SEGMENTS;
 --DBMS_SPACE pour les blocs libres et utilisés.
 
---Requete 5 -------------------A VERIFIER
+--Requete 5 
 ALTER TABLE prop.FILM SHRINK SPACE COMPACT;
 
 --Requete 6
-select * from dba_sys_privs;
+SELECT * FROM DBA_SYS_PRIVS;
+
+--Requete 7
+--7.1 : selectionne dans le dictionnaire tout ce qui a pour nom de table DVD
+SELECT * 
+FROM DICT
+WHERE TABLE_NAME LIKE '%DVD%'; 
+
+--7.2 : selectionne toutes les tables du dictionnaire qui ont pour nom de colonne Ville
+SELECT TABLE_NAME 
+FROM DICT_COLUMNS
+WHERE COLUMN_NAME LIKE 'Ville'; 
+
+--7.3 : selectionne les noms des tables et les commentaires du dictionnaire quand le nom de table contient la lettre C
+--et que le nom d'une colonne contient la lettre A
+SELECT TABLE_NAME, COMMENTS
+FROM DICT
+WHERE TABLE_NAME like '%&C%' AND
+TABLE_NAME in ( SELECT TABLE_NAME
+	FROM DICT_COLUMNS
+	WHERE COLUMN_NAME like '%A%');
