@@ -3,7 +3,7 @@
     CONFIGURE RETENTION POLICY TO RECOVERY WINDOW OF 7 DAYS;
     CONFIGURE CHANNEL DEVICE TYPE DISK FORMAT '/home/aurelien/Documents/M1IFI/backup_oracle/full_%u_%s_%p';
     configure controlfile autobackup on;
-    configure controlfile autobackup format for device type disk to ‘/home/aurelien/Documents/M1IFI/backup_oracle/full_%u_%s_%p’;
+    configure controlfile autobackup format for device type disk to â€˜/home/aurelien/Documents/M1IFI/backup_oracle/full_%u_%s_%pâ€™;
     BACKUP AS BACKUPSET DATABASE PLUS ARCHIVELOG;
     BACKUP CURRENT CONTROLFILE;
     sql 'startup';
