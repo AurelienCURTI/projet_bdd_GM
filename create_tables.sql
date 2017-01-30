@@ -133,14 +133,61 @@ ALTER TABLE ERREUR ADD(CONSTRAINT unique_err UNIQUE(erreur) USING INDEX TABLESPA
 ----------------------------------------------------------------
 
 --Creation des séquences
-CREATE SEQUENCE film_sequence;
-CREATE SEQUENCE dvd_sequence;
-CREATE SEQUENCE br_sequence;
-CREATE SEQUENCE vhs_sequence;
-CREATE SEQUENCE clients_sequence;
-CREATE SEQUENCE vente_sequence;
-CREATE SEQUENCE locations_sequence;
-CREATE SEQUENCE erreur_sequence;
+CREATE SEQUENCE film_sequence 
+START WITH 0 
+INCREMENT BY 1 
+MINVALUE 0 
+NOCACHE 
+NOCYCLE;
+
+CREATE SEQUENCE dvd_sequence
+START WITH 0 
+INCREMENT BY 1 
+MINVALUE 0 
+NOCACHE 
+NOCYCLE;
+
+CREATE SEQUENCE br_sequence
+START WITH 0 
+INCREMENT BY 1 
+MINVALUE 0 
+NOCACHE 
+NOCYCLE;
+
+CREATE SEQUENCE vhs_sequence
+START WITH 0 
+INCREMENT BY 1 
+MINVALUE 0 
+NOCACHE 
+NOCYCLE;
+
+CREATE SEQUENCE clients_sequence
+START WITH 0 
+INCREMENT BY 1 
+MINVALUE 0 
+NOCACHE 
+NOCYCLE;
+
+CREATE SEQUENCE vente_sequence
+START WITH 0 
+INCREMENT BY 1 
+MINVALUE 0 
+NOCACHE 
+NOCYCLE;
+
+CREATE SEQUENCE locations_sequence
+START WITH 0 
+INCREMENT BY 1 
+MINVALUE 0 
+NOCACHE 
+NOCYCLE;
+
+CREATE SEQUENCE erreur_sequence
+START WITH 0 
+INCREMENT BY 1 
+MINVALUE 0 
+NOCACHE 
+NOCYCLE;
 
 --Delimiter avec / pour en creer plusieurs à la volée
 --Creation des trigger qui incrémentent à chaque nouvel INSERT
