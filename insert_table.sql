@@ -15,7 +15,7 @@ INSERT INTO FILM (titre, genre, date_sortie) VALUES ('La grande vadrouille', 'Co
 INSERT INTO FILM (titre, genre, date_sortie) VALUES ('300', 'Action', TO_DATE('2006', 'YYYY'));
 INSERT INTO FILM (titre, genre, date_sortie) VALUES ('Titanic', 'Romantique', TO_DATE('1997', 'YYYY'));
 INSERT INTO FILM (titre, genre, date_sortie) VALUES ('Mission impossible', 'Action',  TO_DATE('1996', 'YYYY'));
-INSERT INTO FILM (titre, genre, date_sortie) VALUES ('Matrix', 'Action', '1999', 'YYYY'));
+INSERT INTO FILM (titre, genre, date_sortie) VALUES ('Matrix', 'Action', TO_DATE('1999', 'YYYY'));
 INSERT INTO FILM (titre, genre, date_sortie) VALUES ('La ligne verte', 'Action',  TO_DATE('1999', 'YYYY'));
 INSERT INTO FILM (titre, genre, date_sortie) VALUES ('Forest Gump', 'Comedie',  TO_DATE('1994', 'YYYY'));
 INSERT INTO FILM (titre, genre, date_sortie) VALUES ('Armageddon', 'Catastrophe', TO_DATE('1998', 'YYYY'));
@@ -61,6 +61,24 @@ INSERT INTO LOCATIONS (id_cli#, id_dvd#, id_vhs#, qte_dvd, qte_vhs, date_debut_l
 VALUES (1, 3, 2, 1, 1, TO_DATE('25/02/2017', 'DD/MM/YYYY'), TO_DATE('28/04/2017', 'DD/MM/YYYY'), 9);
 INSERT INTO LOCATIONS (id_cli#, id_dvd#, id_br#, qte_dvd, qte_br, date_debut_loc, date_fin_loc, prix_loc) 
 VALUES (3, 2, 7, 2, 2, TO_DATE('14/03/2017', 'DD/MM/YYYY'), TO_DATE('04/08/2017', 'DD/MM/YYYY'), 27);
+INSERT INTO LOCATIONS (id_cli#, id_dvd#, id_br#, id_vhs#, qte_dvd, qte_br, qte_vhs, date_debut_loc, date_fin_loc, prix_loc) 
+VALUES (4, 2, 7, 3, 2, 2, 2, TO_DATE('10/02/2017', 'DD/MM/YYYY'), TO_DATE('14/07/2017', 'DD/MM/YYYY'), 36);
+INSERT INTO LOCATIONS (id_cli#, id_br#, qte_br, date_debut_loc, date_fin_loc, prix_loc) 
+VALUES (3, 3, 1, TO_DATE('10/01/2017', 'DD/MM/YYYY'), TO_DATE('18/12/2018', 'DD/MM/YYYY'), 8);
+INSERT INTO LOCATIONS (id_cli#, id_dvd#, qte_dvd, date_debut_loc, date_fin_loc, prix_loc) 
+VALUES (4, 6, 3, TO_DATE('14/03/2017', 'DD/MM/YYYY'), TO_DATE('04/08/2017', 'DD/MM/YYYY'), 14);
+INSERT INTO LOCATIONS (id_cli#, id_vhs#, id_br#, qte_vhs, qte_br, date_debut_loc, date_fin_loc, prix_loc) 
+VALUES (6, 0, 7, 2, 2, TO_DATE('13/02/2017', 'DD/MM/YYYY'), TO_DATE('28/09/2017', 'DD/MM/YYYY'), 27);
+INSERT INTO LOCATIONS (id_cli#, id_dvd#, id_br#, qte_dvd, qte_br, date_debut_loc, date_fin_loc, prix_loc) 
+VALUES (7, 2, 6, 3, 3, TO_DATE('23/04/2017', 'DD/MM/YYYY'), TO_DATE('01/06/2017', 'DD/MM/YYYY'), 47);
+INSERT INTO LOCATIONS (id_cli#, id_br#, qte_br, date_debut_loc, date_fin_loc, prix_loc) 
+VALUES (8, 2, 2, TO_DATE('23/02/2017', 'DD/MM/YYYY'), TO_DATE('07/11/2017', 'DD/MM/YYYY'), 12);
+
+--Insertion table VENTE
+INSERT INTO VENTE (id_cli#, id_dvd#, id_vhs#, qte_dvd, qte_vhs, date_vente, prix_vente) 
+VALUES (5, 3, 0, 5, 1, TO_DATE('28/04/2017', 'DD/MM/YYYY'), 17);
+INSERT INTO VENTE (id_cli#, id_dvd#, id_br#, qte_dvd, qte_br, date_vente, prix_vente) 
+VALUES (2, 0, 5, 4, 2, TO_DATE('04/08/2017', 'DD/MM/YYYY'), 32);
 
 COMMIT;
 

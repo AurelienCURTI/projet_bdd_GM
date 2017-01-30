@@ -271,39 +271,17 @@ END;
 --Insertion des messages d'erreurs
 INSERT INTO ERREUR (erreur) VALUES ('Erreur : Une location doit concerner un produit.');
 INSERT INTO ERREUR (erreur) VALUES ('Erreur : Une vente doit concerner un produit.');
+INSERT INTO ERREUR (erreur) VALUES ('Erreur : Stock insuffisant ou incorrect.');
+INSERT INTO ERREUR (erreur) VALUES ('Erreur : Une quantite doit etre positive');
 
 
 --Trigger qui vérifie qu'un support est définis pour la table LOCATION avant un INSERT
-CREATE TRIGGER before_insert_locations BEFORE INSERT
+CREATE OR REPLACE TRIGGER before_insert_locations BEFORE INSERT
 ON LOCATIONS FOR EACH ROW
-BEGIN
-    IF :new.id_dvd# IS NULL
-    AND :new.id_br# IS NULL
-    AND :new.id_vhs# IS NULL
-      THEN
-		--on insert une ligne qui existe déjà dans la table erreur, comme elle est
-		--en index UNIQUE celà nous permet d'avoir une erreur détaillé
-        INSERT INTO ERREUR (erreur) VALUES ('Erreur : Une location doit concerner un produit.');
-    END IF;
-END ;
-/
---Trigger qui vérifie qu'un support est définis pour la table LOCATION avant un UPDATE
-CREATE TRIGGER before_update_locations BEFORE UPDATE
-ON LOCATIONS FOR EACH ROW
-BEGIN
-    IF :new.id_dvd# IS NULL
-    AND :new.id_br# IS NULL
-    AND :new.id_vhs# IS NULL
-      THEN
-		--on insert une ligne qui existe déjà dans la table erreur, comme elle est
-		--en index UNIQUE celà nous permet d'avoir une erreur détaillé
-        INSERT INTO ERREUR (erreur) VALUES ('Erreur : Une location doit concerner un produit.');
-    END IF;
-END;
-/
---Trigger qui vérifie qu'un support est définis pour la table VENTE avant un INSERT
-CREATE TRIGGER before_insert_vente BEFORE INSERT
-ON VENTE FOR EACH ROW
+DECLARE 
+  dvdqte NUMBER(9);
+  brqte NUMBER(9);
+  vhsqte NUMBER(9);
 BEGIN
     IF :new.id_dvd# IS NULL
     AND :new.id_br# IS NULL
@@ -312,11 +290,102 @@ BEGIN
 		--on insert une ligne qui existe déjà dans la table erreur, comme elle est
 		--en index UNIQUE celà nous permet d'avoir une erreur détaillé
         INSERT INTO ERREUR (erreur) VALUES ('Erreur : Une vente doit concerner un produit.');
+    END IF;
+    
+    IF :new.id_dvd# IS NOT NULL THEN
+      SELECT DVD.quantite INTO dvdqte FROM DVD WHERE DVD.id_dvd = :new.id_dvd#;
+      IF (dvdqte - :new.qte_dvd >= 0) THEN
+        UPDATE DVD SET DVD.quantite = (DVD.quantite - :new.qte_dvd) WHERE DVD.id_dvd = :new.id_dvd#;
+      ELSE
+        INSERT INTO ERREUR (erreur) VALUES ('Erreur : Stock insuffisant ou incorrect.');
+      END IF;
+    END IF;
+    
+    IF :new.id_br# IS NOT NULL THEN
+      SELECT BLUERAY.quantite INTO brqte FROM BLUERAY WHERE BLUERAY.id_br = :new.id_br#;
+      IF (brqte - :new.qte_br >= 0) THEN
+        UPDATE BLUERAY SET BLUERAY.quantite = (BLUERAY.quantite - :new.qte_br) WHERE BLUERAY.id_br = :new.id_br#;
+      ELSE
+        INSERT INTO ERREUR (erreur) VALUES ('Erreur : Stock insuffisant ou incorrect.');
+      END IF;
+    END IF;
+    
+    IF :new.id_vhs# IS NOT NULL THEN
+      SELECT VHS.quantite INTO vhsqte FROM VHS WHERE VHS.id_vhs = :new.id_vhs#;
+      IF (vhsqte - :new.qte_vhs >= 0) THEN
+        UPDATE VHS SET VHS.quantite = (VHS.quantite - :new.qte_vhs) WHERE VHS.id_vhs = :new.id_vhs#;
+      ELSE
+        INSERT INTO ERREUR (erreur) VALUES ('Erreur : Stock insuffisant ou incorrect.');
+      END IF;
+    END IF;
+END;
+/
+--Trigger qui vérifie qu'un support est définis pour la table LOCATION avant un UPDATE
+CREATE OR REPLACE TRIGGER before_update_locations BEFORE UPDATE
+ON LOCATIONS FOR EACH ROW
+BEGIN
+    IF :new.id_dvd# IS NULL
+    AND :new.id_br# IS NULL
+    AND :new.id_vhs# IS NULL
+      THEN
+		--on insert une ligne qui existe déjà dans la table erreur, comme elle est
+		--en index UNIQUE celà nous permet d'avoir une erreur détaillé
+        INSERT INTO ERREUR (erreur) VALUES ('Erreur : Une location doit concerner un produit.');
+    END IF;
+    
+    IF (:new.qte_dvd < 0) OR (:new.qte_br < 0) OR (:new.qte_vhs < 0) THEN
+    	INSERT INTO ERREUR (erreur) VALUES ('Erreur : Une quantite doit etre positive');
+    END IF;
+    
+END;
+/
+--Trigger qui vérifie qu'un support est définis pour la table VENTE avant un INSERT
+CREATE OR REPLACE TRIGGER before_insert_vente BEFORE INSERT
+ON VENTE FOR EACH ROW
+DECLARE 
+  dvdqte NUMBER(9);
+  brqte NUMBER(9);
+  vhsqte NUMBER(9);
+BEGIN
+    IF :new.id_dvd# IS NULL
+    AND :new.id_br# IS NULL
+    AND :new.id_vhs# IS NULL
+      THEN
+		--on insert une ligne qui existe déjà dans la table erreur, comme elle est
+		--en index UNIQUE celà nous permet d'avoir une erreur détaillé
+        INSERT INTO ERREUR (erreur) VALUES ('Erreur : Une vente doit concerner un produit.');
+    END IF;
+    
+    IF :new.id_dvd# IS NOT NULL THEN
+      SELECT DVD.quantite INTO dvdqte FROM DVD WHERE DVD.id_dvd = :new.id_dvd#;
+      IF (dvdqte - :new.qte_dvd >= 0) THEN
+        UPDATE DVD SET DVD.quantite = (DVD.quantite - :new.qte_dvd) WHERE DVD.id_dvd = :new.id_dvd#;
+      ELSE
+        INSERT INTO ERREUR (erreur) VALUES ('Erreur : Stock insuffisant ou incorrect.');
+      END IF;
+    END IF;
+    
+    IF :new.id_br# IS NOT NULL THEN
+      SELECT BLUERAY.quantite INTO brqte FROM BLUERAY WHERE BLUERAY.id_br = :new.id_br#;
+      IF (brqte - :new.qte_br >= 0) THEN
+        UPDATE BLUERAY SET BLUERAY.quantite = (BLUERAY.quantite - :new.qte_br) WHERE BLUERAY.id_br = :new.id_br#;
+      ELSE
+        INSERT INTO ERREUR (erreur) VALUES ('Erreur : Stock insuffisant ou incorrect.');
+      END IF;
+    END IF;
+    
+    IF :new.id_vhs# IS NOT NULL THEN
+      SELECT VHS.quantite INTO vhsqte FROM VHS WHERE VHS.id_vhs = :new.id_vhs#;
+      IF (vhsqte - :new.qte_vhs >= 0) THEN
+        UPDATE VHS SET VHS.quantite = (VHS.quantite - :new.qte_vhs) WHERE VHS.id_vhs = :new.id_vhs#;
+      ELSE
+        INSERT INTO ERREUR (erreur) VALUES ('Erreur : Stock insuffisant ou incorrect.');
+      END IF;
     END IF;
 END;
 /
 --Trigger qui vérifie qu'un support est définis pour la table VENTE avant un UPDATE
-CREATE TRIGGER before_update_vente BEFORE UPDATE
+CREATE OR REPLACE TRIGGER before_update_vente BEFORE UPDATE
 ON VENTE FOR EACH ROW
 BEGIN
     IF :new.id_dvd# IS NULL
@@ -326,6 +395,10 @@ BEGIN
 		--on insert une ligne qui existe déjà dans la table erreur, comme elle est
 		--en index UNIQUE celà nous permet d'avoir une erreur détaillé
         INSERT INTO ERREUR (erreur) VALUES ('Erreur : Une vente doit concerner un produit.');
+    END IF;
+    
+    IF (:new.qte_dvd < 0) OR (:new.qte_br < 0) OR (:new.qte_vhs < 0) THEN
+    	INSERT INTO ERREUR (erreur) VALUES ('Erreur : Une quantite doit etre positive');
     END IF;
 END;
 /
