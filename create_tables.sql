@@ -6,13 +6,14 @@
 CREATE TABLE FILM (
 	id_film     NUMBER(9) NOT NULL,
 	titre      	VARCHAR2(100) NOT NULL,
-	genre    	VARCHAR2(25) NOT NULL,
+	genre    	VARCHAR2(100) NOT NULL,
 	date_sortie DATE NOT NULL
 	
 )TABLESPACE tbs_datas;
 
-ALTER TABLE FILM ADD(CONSTRAINT chk_genre CHECK(genre IN ('Action','Comedie','Horreur','Romantique','Enfants')));
+ALTER TABLE FILM ADD(CONSTRAINT chk_genre CHECK(genre IN ('Action','Comedie','Horreur','Romantique','Enfants','Thriller','Drame','Policier','Fantastique','Catastrophe')));
 ALTER TABLE FILM ADD(CONSTRAINT pk_film PRIMARY KEY(id_film) USING INDEX TABLESPACE tbs_indexes);
+ALTER TABLE FILM ADD(CONSTRAINT unique_film_titre UNIQUE(titre) USING INDEX TABLESPACE tbs_indexes);
 
 CREATE INDEX idx_chk_genre_film ON FILM(genre) TABLESPACE tbs_indexes;
 
@@ -25,6 +26,7 @@ CREATE TABLE DVD (
 
 ALTER TABLE DVD ADD(CONSTRAINT pk_dvd PRIMARY KEY(id_dvd) USING INDEX TABLESPACE tbs_indexes);
 ALTER TABLE DVD ADD(CONSTRAINT fk_dvd_film FOREIGN KEY(id_f#) REFERENCES FILM(id_film));
+ALTER TABLE DVD ADD(CONSTRAINT unique_dvd_f UNIQUE(id_f#) USING INDEX TABLESPACE tbs_indexes);
 
 CREATE INDEX idx_fk_dvd_film ON DVD(id_f#) TABLESPACE tbs_indexes;
 
@@ -37,6 +39,7 @@ CREATE TABLE BLUERAY (
 
 ALTER TABLE BLUERAY ADD(CONSTRAINT pk_br PRIMARY KEY(id_br) USING INDEX TABLESPACE tbs_indexes);
 ALTER TABLE BLUERAY ADD(CONSTRAINT fk_br_film FOREIGN KEY(id_f#) REFERENCES FILM(id_film));
+ALTER TABLE BLUERAY ADD(CONSTRAINT unique_br_f UNIQUE(id_f#) USING INDEX TABLESPACE tbs_indexes);
 
 CREATE INDEX idx_fk_br_film ON BLUERAY(id_f#) TABLESPACE tbs_indexes;
 
@@ -49,6 +52,7 @@ CREATE TABLE VHS (
 
 ALTER TABLE VHS ADD(CONSTRAINT pk_vhs PRIMARY KEY(id_vhs) USING INDEX TABLESPACE tbs_indexes);
 ALTER TABLE VHS ADD(CONSTRAINT fk_vhs_film FOREIGN KEY(id_f#) REFERENCES FILM(id_film));
+ALTER TABLE VHS ADD(CONSTRAINT unique_vhs_f UNIQUE(id_f#) USING INDEX TABLESPACE tbs_indexes);
 
 CREATE INDEX idx_fk_vhs_film ON VHS(id_f#) TABLESPACE tbs_indexes;
 
@@ -278,3 +282,5 @@ BEGIN
     END IF;
 END;
 /
+
+COMMIT;
